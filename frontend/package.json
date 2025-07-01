@@ -1,0 +1,20 @@
+{
+  "name": "ezgi",
+  "version": "0.1.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tabibyte",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "jotai": "^2.12.5",
+    "react": "^19.1.0",
+    "react-router-dom": "^7.6.3",
+    "tone": "^15.1.22",
+    "typescript": "^5.8.3",
+    "zustand": "^5.0.6"
+  }
+}
