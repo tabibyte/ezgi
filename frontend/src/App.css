@@ -1,0 +1,670 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main Layout */
+.main-layout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.app-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+/* Music Workspace */
+.music-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* Top Controls */
+.top-controls {
+  background: #333;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.control-section h3 {
+  margin-bottom: 1rem;
+  color: #64b5f6;
+}
+
+.controls-row {
+  display: flex;
+  gap: 2rem;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-group label {
+  font-size: 0.9rem;
+  color: #ccc;
+  font-weight: 500;
+}
+
+.tempo-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tempo-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: #555;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tempo-btn:hover {
+  background: #666;
+}
+
+.tempo-display {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #64b5f6;
+  min-width: 50px;
+  text-align: center;
+}
+
+.control-select {
+  padding: 0.5rem;
+  border: 1px solid #555;
+  background: #444;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.play-btn, .stop-btn, .record-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.play-btn {
+  background: #4caf50;
+  color: white;
+}
+
+.stop-btn {
+  background: #f44336;
+  color: white;
+}
+
+.record-btn {
+  background: #ff9800;
+  color: white;
+}
+
+/* Piano Roll */
+.piano-roll {
+  flex: 1;
+  background: #333;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.piano-roll-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.piano-roll-header h3 {
+  color: #64b5f6;
+}
+
+.piano-roll-tools {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tool-btn {
+  padding: 0.5rem;
+  border: 1px solid #555;
+  background: #444;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tool-btn.active {
+  background: #64b5f6;
+  border-color: #64b5f6;
+}
+
+.piano-roll-container {
+  flex: 1;
+  display: flex;
+  border: 1px solid #555;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.piano-keys {
+  width: 80px;
+  background: #2a2a2a;
+  border-right: 1px solid #555;
+}
+
+.key-label {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #555;
+  font-size: 0.8rem;
+  background: white;
+  color: black;
+}
+
+.key-label.black {
+  background: #333;
+  color: white;
+}
+
+.piano-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-header {
+  height: 40px;
+  display: flex;
+  background: #2a2a2a;
+  border-bottom: 1px solid #555;
+}
+
+.measure {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #555;
+  font-weight: bold;
+  color: #64b5f6;
+}
+
+.grid-content {
+  flex: 1;
+  position: relative;
+}
+
+.grid-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  position: relative;
+}
+
+.sample-notes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.sample-note {
+  position: absolute;
+  background: #64b5f6;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  transform: translateY(-50%);
+}
+
+/* Bottom Controls */
+.bottom-controls {
+  background: #333;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.genre-select {
+  min-width: 150px;
+}
+
+.generate-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.generate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.action-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #555;
+  background: #444;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.action-btn:hover {
+  background: #555;
+}
+
+/* AI Sidebar */
+.ai-sidebar {
+  width: 400px;
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.ai-dialog {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-header {
+  margin-bottom: 1.5rem;
+}
+
+.ai-header h3 {
+  color: #64b5f6;
+  margin-bottom: 0.5rem;
+}
+
+.ai-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-indicator.online {
+  background: #4caf50;
+}
+
+/* Theory Concepts */
+.theory-concepts {
+  margin-bottom: 1.5rem;
+}
+
+.theory-concepts h4 {
+  margin-bottom: 1rem;
+  color: #81c784;
+}
+
+.concept-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.concept-btn {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #555;
+  background: #444;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.concept-btn:hover {
+  background: #64b5f6;
+  border-color: #64b5f6;
+}
+
+/* Chat Interface */
+.chat-interface {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #333;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  max-height: 300px;
+}
+
+.message {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.user-message {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.message-content {
+  background: #444;
+  padding: 0.75rem;
+  border-radius: 12px;
+  max-width: 80%;
+}
+
+.user-message .message-content {
+  background: #64b5f6;
+}
+
+.demo-btn {
+  background: #81c784;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.chat-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-text-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #555;
+  background: #444;
+  color: white;
+  border-radius: 6px;
+}
+
+.send-btn {
+  padding: 0.75rem;
+  border: none;
+  background: #64b5f6;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Quick Actions */
+.quick-actions h4 {
+  margin-bottom: 1rem;
+  color: #ffb74d;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quick-btn {
+  padding: 0.75rem;
+  border: 1px solid #555;
+  background: #444;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.quick-btn:hover {
+  background: #555;
+}
+
+/* Generate Popup */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.generate-popup {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.popup-header h3 {
+  color: #64b5f6;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.generation-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 2px solid #555;
+  background: #333;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.option-btn:hover {
+  border-color: #64b5f6;
+  background: #3a3a3a;
+}
+
+.option-icon {
+  font-size: 2rem;
+}
+
+.option-content h4 {
+  margin-bottom: 0.25rem;
+  color: #64b5f6;
+}
+
+.option-content p {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.advanced-options {
+  margin-bottom: 2rem;
+}
+
+.advanced-options h4 {
+  margin-bottom: 1rem;
+  color: #ffb74d;
+}
+
+.option-row {
+  margin-bottom: 0.5rem;
+}
+
+.option-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.popup-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.cancel-btn {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #555;
+  background: #444;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.confirm-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .ai-sidebar {
+    width: 350px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .ai-sidebar {
+    width: 100%;
+    height: 300px;
+  }
+  
+  .controls-row {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .controls-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .main-content {
+    padding: 0.5rem;
+  }
+}
