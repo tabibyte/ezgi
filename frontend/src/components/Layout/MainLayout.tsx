@@ -8,9 +8,11 @@ import GeneratePopup from './GeneratePopup';
 const MainLayout: React.FC = () => {
   return (
     <div className="main-layout">
-      {/* Header with app title */}
+      {/* Header with note emoji only */}
       <header className="app-header">
-        <h1>🎵 Ezgi - Music Learning & Creation</h1>
+        <div className="header-content">
+          <span className="note-emoji">🎵</span>
+        </div>
       </header>
 
       {/* Main content area */}

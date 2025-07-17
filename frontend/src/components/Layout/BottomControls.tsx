@@ -14,10 +14,6 @@ const BottomControls: React.FC = () => {
       </div>
       
       <div className="generate-section">
-        <div className="generate-options">
-          <button className="generate-option-btn">Generate Chords</button>
-          <button className="generate-option-btn">Generate Melody</button>
-        </div>
         <button className="main-generate-btn">Generate</button>
       </div>
     </div>

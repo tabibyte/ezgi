@@ -3,16 +3,6 @@ import React from 'react';
 const PianoRoll: React.FC = () => {
   return (
     <div className="piano-roll">
-      <div className="piano-roll-header">
-        <h3>🎹 Piano Roll (FL Studio Style)</h3>
-        <div className="piano-roll-tools">
-          <button className="tool-btn active">✏️ Draw</button>
-          <button className="tool-btn">✂️ Cut</button>
-          <button className="tool-btn">📋 Copy</button>
-          <button className="tool-btn">🗑️ Delete</button>
-        </div>
-      </div>
-      
       <div className="piano-roll-container">
         {/* Piano keys on the left */}
         <div className="piano-keys">
@@ -29,6 +19,18 @@ const PianoRoll: React.FC = () => {
           <div className="key-label">D4</div>
           <div className="key-label black">C#4</div>
           <div className="key-label">C4</div>
+          <div className="key-label">B3</div>
+          <div className="key-label black">A#3</div>
+          <div className="key-label">A3</div>
+          <div className="key-label black">G#3</div>
+          <div className="key-label">G3</div>
+          <div className="key-label black">F#3</div>
+          <div className="key-label">F3</div>
+          <div className="key-label">E3</div>
+          <div className="key-label black">D#3</div>
+          <div className="key-label">D3</div>
+          <div className="key-label black">C#3</div>
+          <div className="key-label">C3</div>
         </div>
 
         {/* Main grid area */}
@@ -43,8 +45,6 @@ const PianoRoll: React.FC = () => {
           <div className="grid-content">
             {/* Grid lines and note placement area */}
             <div className="grid-placeholder">
-              <p>🎼 Click here to add notes</p>
-              <p>📝 Piano roll will be implemented with Tone.js</p>
               <div className="sample-notes">
                 <div className="note sample-note" style={{left: '10%', top: '20%'}}>C4</div>
                 <div className="note sample-note" style={{left: '25%', top: '40%'}}>E4</div>

@@ -30,25 +30,30 @@ body {
 }
 
 .app-header {
-  background: #f5f5f5;
-  border-bottom: 1px solid #ccc;
-  padding: 0.75rem 1rem;
+  background: white;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 8px 16px;
   flex-shrink: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 48px;
 }
 
-.app-header h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+.note-emoji {
+  font-size: 24px;
   margin: 0;
-  color: #333;
 }
 
 .main-content {
   flex: 1;
   display: flex;
-  gap: 0.75rem;
-  padding: 0.75rem;
+  padding: 0;
   overflow: hidden;
   min-height: 0;
 }
@@ -58,9 +63,8 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  background: white;
-  border: 1px solid #ccc;
+  background: transparent;
+  border: none;
   padding: 0;
   min-height: 0;
   overflow: hidden;
@@ -68,9 +72,10 @@ body {
 
 /* Top Controls */
 .top-controls {
-  background: #f5f5f5;
-  border: 1px solid #ccc;
-  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 12px 16px;
   flex-shrink: 0;
   display: flex;
   justify-content: space-between;
@@ -125,55 +130,13 @@ body {
 /* Piano Roll */
 .piano-roll {
   flex: 1;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-}
-
-.piano-roll-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-  flex-shrink: 0;
-}
-
-.piano-roll-header h3 {
-  color: #333;
-  font-size: 1rem;
-  margin: 0;
-}
-
-.piano-roll-tools {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.tool-btn {
-  padding: 0.5rem;
-  border: 1px solid #999;
-  background: white;
-  color: #333;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.tool-btn.active {
-  background: #007acc;
-  color: white;
-  border-color: #007acc;
-}
-
-.tool-btn:hover {
-  background: #f0f0f0;
-}
-
-.tool-btn.active:hover {
-  background: #005a99;
 }
 
 .piano-roll-container {
@@ -256,20 +219,26 @@ body {
 
 .sample-note {
   position: absolute;
-  background: #007acc;
+  background: #444444;
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.8rem;
   transform: translateY(-50%);
-  border: 1px solid #005a99;
+  border: 1px solid #333333;
+  width: 120px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 /* Bottom Controls */
 .bottom-controls {
-  background: #f5f5f5;
-  border: 1px solid #ccc;
-  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  border-top: 1px solid #e5e5e5;
+  padding: 12px 16px;
   flex-shrink: 0;
   display: flex;
   justify-content: space-between;
@@ -307,41 +276,20 @@ body {
 }
 
 .genre-btn.active {
-  background: #007acc;
+  background: #444444;
   color: white;
-  border-color: #007acc;
+  border-color: #444444;
 }
 
 .generate-section {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.generate-options {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.generate-option-btn {
-  padding: 0.4rem 0.8rem;
-  border: 1px solid #999;
-  background: white;
-  color: #333;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.generate-option-btn:hover {
-  background: #f0f0f0;
 }
 
 .main-generate-btn {
-  padding: 0.6rem 2rem;
-  border: 1px solid #007acc;
-  background: #007acc;
+  padding: 8px 24px;
+  border: 1px solid #444444;
+  background: #444444;
   color: white;
   border-radius: 4px;
   cursor: pointer;
@@ -350,16 +298,17 @@ body {
 }
 
 .main-generate-btn:hover {
-  background: #005a99;
+  background: #333333;
 }
 
 /* AI Sidebar */
 .ai-sidebar {
   width: 300px;
   max-width: 25vw;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 1.5rem;
+  background: transparent;
+  border: none;
+  border-left: 1px solid #e5e5e5;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -376,6 +325,8 @@ body {
 .theory-section {
   flex: 1;
   margin-bottom: 1rem;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .theory-title {
@@ -413,21 +364,24 @@ body {
 
 .theory-btn {
   padding: 0.5rem 1rem;
-  border: 1px solid #007acc;
+  border: 1px solid #444444;
   background: white;
-  color: #007acc;
+  color: #444444;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
 }
 
 .theory-btn:hover {
-  background: #007acc;
+  background: #444444;
   color: white;
 }
 
 .chat-input-section {
   flex-shrink: 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid #eee;
+  margin-top: 0.5rem;
 }
 
 .chat-input {
