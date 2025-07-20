@@ -38,3 +38,27 @@ Bu proje MIT Lisansı altında lisanslanmıştır - ayrıntılar için [LICENSE]
   - İskeleti oluşturulan uygulama üzerinde daha sıkı bir işbirliği yapılmasına karar verildi.
   - NotebookLM gibi bir stüdyo tarzında ürün çıkarılmasına karar verildi.
 
+# Sprint2
+
+Sprint Notları: Bu sprint'te uygulamanın temel bir özelliği olan MIDI editörünün tasarım, front-end ve back-end geliştirmeleri tamamlandı. Kullanıcı hikayeleri (user story) ve kabul kriterleri (acceptance criteria) detaylı bir şekilde yazılarak geliştirme sürecine netlik kazandırıldı. En önemli adımlardan biri olarak chatbot modülüne yapay zeka entegrasyonu başarıyla gerçekleştirildi.
+
+Sprint İçinde Tamamlanması Tahmin Edilen Puan: 150 Puan
+Toplam Puan: 400 Puan. Bu sprint'e 150 puan verilmesinin sebebi, uygulamanın interaktif müzik oluşturma vizyonunun temel taşı olan MIDI editörünün hem tasarımsal hem de fonksiyonel olarak hayata geçirilmesi ve chatbot'un yapay zeka ile akıllandırılmasıdır. Bu, projenin en kritik ve emek yoğun aşamalarından birini oluşturmaktadır.
+
+Daily Scrum: [Günlük ilerlemelerin takip edildiği dokümanın linki buraya eklenecek]
+Daily Scrum Ekran Görüntüleri: [Daily Scrum whatsapp görüntülerinin bulunduğu Drive klasör linki buraya eklenecek]
+Sprintler İçin Trello Ekran Görüntüsü: [Trello panosunun ekran görüntüsü linki buraya eklenecek]
+
+Uygulama Tanıtımı: Müzik teorisi eğitimini yapay zeka destekli müzik üretimiyle birleştirmeyi hedefleyen yenilikçi bir uygulamadır. Bu platform, kullanıcıların müzik teorisinin temel prensiplerini anlamalarını kolaylaştırırken, aynı zamanda kendi müzikal fikirlerini hayata geçirmelerine olanak tanımayı amaçlamaktadır. Bu sprint'te geliştirilen MIDI editörü sayesinde, kullanıcıların notaları düzenleyebilmesine, kendi bestelerini oluşturabilmesine ve yapay zekanın önerileriyle müziklerini geliştirebilmesine olanak tanıyacak interaktif piyano ve besteleme modülünün temelleri atılmıştır. Temel amacımız, müzik teorisi bilgisi olmayan kullanıcıların dahi kendi müziklerini oluşturabilmelerini sağlayarak, müzik eğitimini daha erişilebilir, interaktif ve keyifli hale getirmektir.
+
+Ürün Durum Görüntüsü: [Uygulamanın güncel durumunu gösteren ekran görüntüsü veya video linki buraya eklenecek]
+
+Sprint Review: İkinci sprint'imizi, projemizin etkileşimli ve yaratıcı vizyonunu gerçeğe dönüştüren önemli adımlarla tamamladık. Bu sprint'te, kullanıcıların kendi müziklerini oluşturmasına olanak tanıyacak olan MIDI editörünün tasarımını, ön yüz (front-end) ve arka yüz (back-end) kodlamasını başarıyla bitirdik. Ayrıca, yapay zeka destekli chatbot'u aktif hale getirdik ve gelecekteki geliştirmeler için kullanıcı hikayeleri ile kabul kriterlerini netleştirdik. Bu adımlar, uygulamamızın temel işlevselliğini önemli ölçüde artırmıştır.
+
+Sprint Retrospective:
+
+Daily Scrum toplantılarına daha fazla özen gösterilmesi ve katılımın artırılması kararlaştırıldı.
+
+Ekip içi senkronizasyonu artırmak amacıyla sabit toplantı günleri ve saatleri belirlendi.
+
+Uygulamanın son sprint'te ulaşması hedeflenen nihai özellikleri ve kapsamı üzerine verimli bir tartışma gerçekleştirildi.
