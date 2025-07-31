@@ -6,13 +6,13 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #1a1a1a;
-  color: #e0e0e0;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  color: #ffffff;
   overflow: hidden;
 }
 
@@ -20,7 +20,7 @@ body {
   height: 100vh;
   position: relative;
   overflow: hidden;
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
 }
 
 /* Full-screen MIDI Editor */
@@ -30,9 +30,26 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.midi-editor-fullscreen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .piano-roll-container {
@@ -40,16 +57,69 @@ body {
   display: flex;
   overflow: hidden;
   height: calc(100vh - 35px); /* Ensure consistent height */
+  position: relative;
+  z-index: 1;
 }
 
 .piano-keys {
-  width: 80px;
-  background: #2a2a2a;
-  border-right: 1px solid #333;
+  width: 120px;
+  background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+  border-right: 2px solid rgba(120, 119, 198, 0.3);
+  box-shadow: 
+    inset -1px 0 0 rgba(255, 255, 255, 0.1),
+    4px 0 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   height: 100vh; /* Take full viewport height */
+  position: relative;
+  z-index: 10;
+}
+
+/* ezgi Logo Header */
+.piano-header-logo {
+  height: 35px;
+  flex-shrink: 0;
+  background: #2a2a3e;
+  border-bottom: 2px solid rgba(120, 119, 198, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.piano-header-logo::before {
+  display: none;
+}
+
+@keyframes logoShine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.ezgi-logo {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  position: relative;
+  z-index: 2;
+  letter-spacing: 1px;
+  text-transform: lowercase;
+}
+
+@keyframes logoGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.ezgi-logo::after {
+  display: none;
+}
+
+.piano-header-logo:hover .ezgi-logo::after {
+  display: none;
 }
 
 .key-label {
@@ -57,54 +127,88 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid #333;
-  font-size: 0.75rem;
-  background: #3a3a3a;
-  color: #e0e0e0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+  font-weight: 600;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.08) 100%);
+  color: #ffffff;
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   box-sizing: border-box;
+  position: relative;
+}
+
+.key-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, transparent 0%, rgba(120, 119, 198, 0.8) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .key-label:hover {
-  background: #4a4a4a;
+  background: linear-gradient(90deg, rgba(120, 119, 198, 0.1) 0%, rgba(120, 119, 198, 0.2) 100%);
+  transform: translateX(2px);
+  box-shadow: inset 0 0 0 1px rgba(120, 119, 198, 0.3);
+}
+
+.key-label:hover::before {
+  opacity: 1;
 }
 
 .key-label.black {
-  background: #1a1a1a;
-  color: #ccc;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(30, 30, 50, 0.8) 100%);
+  color: #aaaaaa;
+  border-color: rgba(255, 255, 255, 0.02);
 }
 
 .key-label.black:hover {
-  background: #2a2a2a;
+  background: linear-gradient(90deg, rgba(120, 119, 198, 0.2) 0%, rgba(120, 119, 198, 0.3) 100%);
+  color: #ffffff;
 }
 
 .key-label.active {
-  background: #555;
-  color: white;
-  border-left: 3px solid #777;
+  background: linear-gradient(90deg, rgba(120, 219, 255, 0.2) 0%, rgba(120, 219, 255, 0.4) 100%);
+  color: #ffffff;
+  box-shadow: 
+    inset 0 0 0 1px rgba(120, 219, 255, 0.5),
+    0 0 10px rgba(120, 219, 255, 0.2);
+}
+
+.key-label.active::before {
+  background: linear-gradient(180deg, transparent 0%, rgba(120, 219, 255, 1) 50%, transparent 100%);
+  opacity: 1;
 }
 
 .key-label.black.active {
-  background: #444;
-  border-left: 3px solid #666;
+  background: linear-gradient(90deg, rgba(120, 219, 255, 0.3) 0%, rgba(120, 219, 255, 0.5) 100%);
+  color: #ffffff;
 }
 
 .piano-grid {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #1a1a1a;
+  background: rgba(15, 15, 35, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 0 0 0 20px;
+  overflow: hidden;
 }
 
 .grid-header {
   height: 35px;
   display: flex;
-  background: #2a2a2a;
-  border-bottom: 1px solid #333;
+  background: linear-gradient(135deg, #2a2a3e 0%, #1e1e2e 100%);
+  border-bottom: 2px solid rgba(120, 119, 198, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   flex-shrink: 0;
   width: 100%; /* Take full width */
+  backdrop-filter: blur(15px);
 }
 
 .measure {
@@ -112,26 +216,35 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid #333;
-  font-weight: bold;
-  color: #e0e0e0;
+  border-right: 1px solid rgba(120, 119, 198, 0.15);
+  font-weight: 600;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
   position: relative;
+  transition: all 0.2s ease;
+}
+
+.measure:hover {
+  background: rgba(120, 119, 198, 0.05);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .measure-end {
-  border-right: 3px solid #555; /* Thick line at end of every 4 bars */
+  border-right: 3px solid rgba(120, 119, 198, 0.6); /* Thick line at end of every 4 bars */
+  box-shadow: 2px 0 8px rgba(120, 119, 198, 0.2);
 }
 
 .grid-content {
   flex: 1;
   position: relative;
-  background: #1a1a1a;
+  background: linear-gradient(135deg, rgba(15, 15, 35, 0.9) 0%, rgba(26, 26, 46, 0.8) 100%);
   background-image: 
-    linear-gradient(to right, #333 1px, transparent 1px),
-    linear-gradient(to bottom, #333 1px, transparent 1px);
+    linear-gradient(to right, rgba(120, 119, 198, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 119, 198, 0.1) 1px, transparent 1px);
   background-size: calc(100% / 32) calc((100vh - 35px) / 24); /* 32 equal measures, 24 keys */
   cursor: crosshair;
   height: calc(100vh - 35px);
+  backdrop-filter: blur(5px);
 }
 
 .grid-placeholder {
@@ -150,34 +263,57 @@ body {
 
 .sample-note {
   position: absolute;
-  background: #555;
+  background: linear-gradient(135deg, rgba(120, 219, 255, 0.8) 0%, rgba(120, 119, 198, 0.9) 100%);
   color: white;
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 4px 12px;
+  border-radius: 12px;
   font-size: 0.8rem;
+  font-weight: 600;
   transform: translateY(-50%);
-  border: 1px solid #666;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   height: calc((100vh - 35px) / 24 - 8px); /* Match key height minus padding for visual separation */
   display: flex;
   align-items: center;
   justify-content: flex-start;
   cursor: pointer;
   pointer-events: auto; /* Re-enable pointer events for notes */
-  transition: all 0.1s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   min-width: 25px;
+  backdrop-filter: blur(10px);
+}
+
+.sample-note::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  border-radius: 10px;
+  pointer-events: none;
 }
 
 .sample-note:hover {
-  background: #666;
-  border-color: #777;
+  background: linear-gradient(135deg, rgba(120, 219, 255, 0.9) 0%, rgba(120, 119, 198, 1) 100%);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 6px 20px rgba(120, 219, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   z-index: 5;
 }
 
 .sample-note.selected {
-  background: #007acc;
-  border-color: #005a99;
-  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.3);
+  background: linear-gradient(135deg, rgba(255, 119, 198, 0.9) 0%, rgba(120, 119, 198, 1) 100%);
+  border-color: rgba(255, 119, 198, 0.8);
+  box-shadow: 
+    0 0 0 3px rgba(255, 119, 198, 0.3),
+    0 8px 25px rgba(255, 119, 198, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   z-index: 10;
 }
 
@@ -493,4 +629,33 @@ body {
   .key-label {
     font-size: 0.7rem;
   }
+}
+
+/* Modern Glow and Animation Effects */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(120, 219, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(120, 219, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(120, 219, 255, 0.2);
+  }
+}
+
+.measure::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(120, 219, 255, 0.8), transparent);
+  transition: width 0.3s ease;
+}
+
+.measure:hover::after {
+  width: 80%;
 }

@@ -15,11 +15,7 @@ interface GridPosition {
 }
 
 const MIDIEditor: React.FC = () => {
-  const [notes, setNotes] = useState<Note[]>([
-    { id: '1', note: 'C4', time: 0.1, duration: 0.5, velocity: 0.8 },
-    { id: '2', note: 'E4', time: 0.25, duration: 0.5, velocity: 0.8 },
-    { id: '3', note: 'G4', time: 0.4, duration: 0.5, velocity: 0.8 }
-  ]);
+  const [notes, setNotes] = useState<Note[]>([]);
   
   const [selectedNotes, setSelectedNotes] = useState<Set<string>>(new Set());
   
@@ -180,13 +176,10 @@ const MIDIEditor: React.FC = () => {
       <div className="piano-roll-container">
         {/* Piano keys on the left */}
         <div className="piano-keys">
-          {/* Header spacer to align with grid header */}
-          <div style={{ 
-            height: '35px', 
-            flexShrink: 0,
-            background: '#2a2a2a',
-            borderBottom: '1px solid #333'
-          }}></div>
+          {/* Header spacer with ezgi logo */}
+          <div className="piano-header-logo">
+            <span className="ezgi-logo">ezgi</span>
+          </div>
           {pianoKeys.map((key) => (
             <div
               key={key}
