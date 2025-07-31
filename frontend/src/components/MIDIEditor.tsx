@@ -77,6 +77,22 @@ const MIDIEditor: React.FC = () => {
     return { x, y };
   }, [pianoKeys]);
   
+  // Handle window resize to automatically update note positions
+  useEffect(() => {
+    const handleResize = () => {
+      // Force re-render of notes with updated positions
+      setNotes(prevNotes => 
+        prevNotes.map(note => ({
+          ...note,
+          position: noteToGrid(note.note, note.time)
+        }))
+      );
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [noteToGrid]);
+  
   // Handle grid click to add/select notes
   const handleGridClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     if (!gridRef.current) return;
@@ -92,7 +108,9 @@ const MIDIEditor: React.FC = () => {
     const keyHeight = containerHeight / 24; // Dynamic key height
     const clickedNote = notes.find(n => {
       const pos = noteToGrid(n.note, n.time);
-      const measureWidth = 100; // Fixed 100px per measure
+      // Calculate dynamic measure width based on screen width
+      const gridWidth = gridRef.current?.clientWidth || 1;
+      const measureWidth = gridWidth / 32; // 32 measures total
       const noteWidth = (n.duration / 0.25) * measureWidth; // Duration in measures
       return (
         x >= pos.x && 
