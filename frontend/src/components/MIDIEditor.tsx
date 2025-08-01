@@ -25,8 +25,13 @@ const MIDIEditor: React.FC = () => {
   const [resizedNote, setResizedNote] = useState<string | null>(null);
   const [justFinishedDrag, setJustFinishedDrag] = useState(false);
   
+  // Selection box states
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [selectionStart, setSelectionStart] = useState({ x: 0, y: 0 });
+  const [selectionEnd, setSelectionEnd] = useState({ x: 0, y: 0 });
+  
   const gridRef = useRef<HTMLDivElement>(null);
-  const synthRef = useRef<Tone.Synth | null>(null);
+  const samplerRef = useRef<Tone.Sampler | null>(null);
   
   // Piano key mappings (2 octaves: C4-B5)
   const pianoKeys = [
@@ -37,12 +42,34 @@ const MIDIEditor: React.FC = () => {
   
   const blackKeys = ['A#5', 'G#5', 'F#5', 'D#5', 'C#5', 'A#4', 'G#4', 'F#4', 'D#4', 'C#4'];
   
+  // Create sample mapping for all piano keys
+  const createSampleMap = () => {
+    const sampleMap: { [key: string]: string } = {};
+    pianoKeys.forEach(note => {
+      // URL encode the note name to handle # characters properly
+      const encodedNote = encodeURIComponent(note);
+      sampleMap[note] = `/samples/${encodedNote}.wav`;
+    });
+    return sampleMap;
+  };
+  
   // Initialize Tone.js
   useEffect(() => {
-    synthRef.current = new Tone.Synth().toDestination();
+    console.log('Initializing Tone.js sampler...');
+    console.log('Sample map:', createSampleMap());
+    
+    samplerRef.current = new Tone.Sampler({
+      urls: createSampleMap(),
+      onload: () => {
+        console.log('Piano samples loaded successfully');
+      },
+      onerror: (error) => {
+        console.error('Error loading samples:', error);
+      }
+    }).toDestination();
     
     return () => {
-      synthRef.current?.dispose();
+      samplerRef.current?.dispose();
     };
   }, []);
   
@@ -197,19 +224,65 @@ const MIDIEditor: React.FC = () => {
             : n
         )
       );
+    } else if (isSelecting) {
+      // Handle selection box dragging
+      setSelectionEnd({ x: mouseX, y: mouseY });
     }
-  }, [isDragging, draggedNote, dragOffset, gridToNote, isResizing, resizedNote, notes, noteToGrid]);
+  }, [isDragging, draggedNote, dragOffset, gridToNote, isResizing, resizedNote, notes, noteToGrid, isSelecting]);
 
   // Handle mouse up to end dragging or resizing
   const handleMouseUp = useCallback(() => {
     const wasDragging = isDragging;
     const wasResizing = isResizing;
+    const wasSelecting = isSelecting;
+    
+    if (wasSelecting) {
+      // Complete selection box operation
+      const selectionRect = {
+        left: Math.min(selectionStart.x, selectionEnd.x),
+        right: Math.max(selectionStart.x, selectionEnd.x),
+        top: Math.min(selectionStart.y, selectionEnd.y),
+        bottom: Math.max(selectionStart.y, selectionEnd.y)
+      };
+      
+      // Find notes within selection rectangle
+      const containerHeight = window.innerHeight - 35;
+      const keyHeight = containerHeight / 24;
+      const gridWidth = gridRef.current?.clientWidth || 1;
+      const measureWidth = gridWidth / 32;
+      
+      const selectedInRect = notes.filter(note => {
+        const pos = noteToGrid(note.note, note.time);
+        const noteWidth = (note.duration / 0.25) * measureWidth;
+        
+        // Check if note overlaps with selection rectangle
+        const noteLeft = pos.x;
+        const noteRight = pos.x + noteWidth;
+        const noteTop = pos.y - keyHeight / 2;
+        const noteBottom = pos.y + keyHeight / 2;
+        
+        return (
+          noteRight >= selectionRect.left &&
+          noteLeft <= selectionRect.right &&
+          noteBottom >= selectionRect.top &&
+          noteTop <= selectionRect.bottom
+        );
+      });
+      
+      // Update selected notes
+      const newSelected = new Set(selectedNotes);
+      selectedInRect.forEach(note => newSelected.add(note.id));
+      setSelectedNotes(newSelected);
+    }
     
     setIsDragging(false);
     setDraggedNote(null);
     setDragOffset({ x: 0, y: 0 });
     setIsResizing(false);
     setResizedNote(null);
+    setIsSelecting(false);
+    setSelectionStart({ x: 0, y: 0 });
+    setSelectionEnd({ x: 0, y: 0 });
     
     // Set flag to prevent immediate grid click after drag/resize
     if (wasDragging || wasResizing) {
@@ -219,7 +292,7 @@ const MIDIEditor: React.FC = () => {
         setJustFinishedDrag(false);
       }, 50);
     }
-  }, [isDragging, isResizing]);
+  }, [isDragging, isResizing, isSelecting, selectionStart, selectionEnd, notes, noteToGrid, selectedNotes]);
 
   // Handle grid click to add/select notes
   const handleGridClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
@@ -228,6 +301,14 @@ const MIDIEditor: React.FC = () => {
     const rect = gridRef.current.getBoundingClientRect();
     const x = event.clientX - rect.left + gridRef.current.scrollLeft; // Account for scroll position
     const y = event.clientY - rect.top;
+    
+    // Check if Ctrl is held for selection box
+    if (event.ctrlKey) {
+      setIsSelecting(true);
+      setSelectionStart({ x, y });
+      setSelectionEnd({ x, y });
+      return;
+    }
     
     const { note, time } = gridToNote(x, y);
     
@@ -278,14 +359,27 @@ const MIDIEditor: React.FC = () => {
   
   // Handle key press for piano keys
   const handleKeyPress = useCallback(async (note: string) => {
-    if (!synthRef.current) return;
-    
-    // Start audio context if needed
-    if (Tone.context.state !== 'running') {
-      await Tone.start();
+    try {
+      console.log(`Attempting to play note: ${note}`);
+      
+      if (!samplerRef.current) {
+        console.error('Sampler not initialized');
+        return;
+      }
+      
+      // Start audio context if needed
+      if (Tone.context.state !== 'running') {
+        console.log('Starting audio context...');
+        await Tone.start();
+        console.log('Audio context started');
+      }
+      
+      console.log('Triggering note...');
+      samplerRef.current.triggerAttackRelease(note, '8n');
+      console.log(`Note ${note} triggered successfully`);
+    } catch (error) {
+      console.error('Error playing note:', error);
     }
-    
-    synthRef.current.triggerAttackRelease(note, '8n');
   }, []);
   
   // Delete selected notes
@@ -384,6 +478,24 @@ const MIDIEditor: React.FC = () => {
                   );
                 })}
               </div>
+              
+              {/* Selection box */}
+              {isSelecting && (
+                <div
+                  className="selection-box"
+                  style={{
+                    left: `${Math.min(selectionStart.x, selectionEnd.x)}px`,
+                    top: `${Math.min(selectionStart.y, selectionEnd.y)}px`,
+                    width: `${Math.abs(selectionEnd.x - selectionStart.x)}px`,
+                    height: `${Math.abs(selectionEnd.y - selectionStart.y)}px`,
+                    position: 'absolute',
+                    border: '1px dashed #007acc',
+                    backgroundColor: 'rgba(0, 122, 204, 0.1)',
+                    pointerEvents: 'none',
+                    zIndex: 1000
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
