@@ -18,6 +18,9 @@ const MIDIEditor: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   
   const [selectedNotes, setSelectedNotes] = useState<Set<string>>(new Set());
+  const [isDragging, setIsDragging] = useState(false);
+  const [draggedNote, setDraggedNote] = useState<string | null>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   
   const gridRef = useRef<HTMLDivElement>(null);
   const synthRef = useRef<Tone.Synth | null>(null);
@@ -89,9 +92,68 @@ const MIDIEditor: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [noteToGrid]);
   
+  // Handle note mouse down for dragging
+  const handleNoteMouseDown = useCallback((event: React.MouseEvent, noteId: string) => {
+    event.stopPropagation(); // Prevent grid click
+    
+    if (!gridRef.current) return;
+    
+    const rect = gridRef.current.getBoundingClientRect();
+    const note = notes.find(n => n.id === noteId);
+    if (!note) return;
+    
+    const notePosition = noteToGrid(note.note, note.time);
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    
+    setIsDragging(true);
+    setDraggedNote(noteId);
+    setDragOffset({
+      x: mouseX - notePosition.x,
+      y: mouseY - notePosition.y
+    });
+    
+    // Select the note being dragged if not already selected
+    if (!selectedNotes.has(noteId)) {
+      setSelectedNotes(new Set([noteId]));
+    }
+  }, [notes, selectedNotes, noteToGrid]);
+
+  // Handle mouse move for dragging
+  const handleMouseMove = useCallback((event: React.MouseEvent) => {
+    if (!isDragging || !draggedNote || !gridRef.current) return;
+    
+    const rect = gridRef.current.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    
+    // Calculate new position accounting for drag offset
+    const newX = mouseX - dragOffset.x;
+    const newY = mouseY - dragOffset.y;
+    
+    // Convert back to note and time
+    const { note, time } = gridToNote(newX, newY);
+    
+    // Update the dragged note's position
+    setNotes(prevNotes => 
+      prevNotes.map(n => 
+        n.id === draggedNote 
+          ? { ...n, note, time: Math.round(time * 16) / 16 } // Snap to 16th notes
+          : n
+      )
+    );
+  }, [isDragging, draggedNote, dragOffset, gridToNote]);
+
+  // Handle mouse up to end dragging
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+    setDraggedNote(null);
+    setDragOffset({ x: 0, y: 0 });
+  }, []);
+
   // Handle grid click to add/select notes
   const handleGridClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-    if (!gridRef.current) return;
+    if (!gridRef.current || isDragging) return; // Don't add notes while dragging
     
     const rect = gridRef.current.getBoundingClientRect();
     const x = event.clientX - rect.left + gridRef.current.scrollLeft; // Account for scroll position
@@ -99,14 +161,14 @@ const MIDIEditor: React.FC = () => {
     
     const { note, time } = gridToNote(x, y);
     
-    // Check if clicking on existing note with more precise detection
+    // Check if clicking on existing note with consistent calculation
     const containerHeight = window.innerHeight - 35; // Available height for grid content
     const keyHeight = containerHeight / 24; // Dynamic key height
+    const gridWidth = gridRef.current?.clientWidth || 1;
+    const measureWidth = gridWidth / 32; // 32 measures total - use dynamic width consistently
+    
     const clickedNote = notes.find(n => {
       const pos = noteToGrid(n.note, n.time);
-      // Calculate dynamic measure width based on screen width
-      const gridWidth = gridRef.current?.clientWidth || 1;
-      const measureWidth = gridWidth / 32; // 32 measures total
       const noteWidth = (n.duration / 0.25) * measureWidth; // Duration in measures
       return (
         x >= pos.x && 
@@ -125,7 +187,7 @@ const MIDIEditor: React.FC = () => {
       }
       setSelectedNotes(newSelected);
     } else {
-      // Add new note
+      // Add new note only if no existing note was found
       const newNote: Note = {
         id: Date.now().toString(),
         note,
@@ -208,6 +270,9 @@ const MIDIEditor: React.FC = () => {
             className="grid-content"
             ref={gridRef}
             onClick={handleGridClick}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp} // End dragging if mouse leaves grid
           >
             <div className="grid-placeholder">
               <div className="sample-notes">
@@ -215,8 +280,9 @@ const MIDIEditor: React.FC = () => {
                   const position = noteToGrid(note.note, note.time);
                   const isSelected = selectedNotes.has(note.id);
                   
-                  // Calculate width based on fixed measure width
-                  const measureWidth = 100; // Fixed 100px per measure
+                  // Calculate width based on dynamic measure width (consistent with click detection)
+                  const gridWidth = gridRef.current?.clientWidth || 1;
+                  const measureWidth = gridWidth / 32; // 32 measures total
                   const noteWidth = (note.duration / 0.25) * measureWidth; // Duration in measures
                   
                   return (
@@ -229,6 +295,7 @@ const MIDIEditor: React.FC = () => {
                         width: `${noteWidth}px`
                       }}
                       title={`${note.note} - ${note.duration}s`}
+                      onMouseDown={(e) => handleNoteMouseDown(e, note.id)}
                     >
                       {note.note}
                     </div>
