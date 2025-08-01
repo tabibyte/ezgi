@@ -154,11 +154,20 @@ const MIDIEditor: React.FC = () => {
       // Convert back to note and time
       const { note, time } = gridToNote(newX, newY);
       
+      // Get the current note to check its duration
+      const currentNote = notes.find(n => n.id === draggedNote);
+      if (!currentNote) return;
+      
+      // Clamp time to valid bounds, accounting for note duration
+      const maxStartTime = 8 - currentNote.duration; // Ensure note doesn't extend beyond 8 seconds
+      const clampedTime = Math.max(0, Math.min(maxStartTime, time));
+      const snappedTime = Math.round(clampedTime * 16) / 16; // Snap to 16th notes
+      
       // Update the dragged note's position
       setNotes(prevNotes => 
         prevNotes.map(n => 
           n.id === draggedNote 
-            ? { ...n, note, time: Math.round(time * 16) / 16 } // Snap to 16th notes
+            ? { ...n, note, time: snappedTime }
             : n
         )
       );
@@ -174,7 +183,11 @@ const MIDIEditor: React.FC = () => {
       // Calculate new duration based on mouse position
       const newWidth = mouseX - notePosition.x;
       const newDuration = Math.max(0.0625, (newWidth / measureWidth) * 0.25); // Minimum 1/16 note
-      const snappedDuration = Math.round(newDuration * 16) / 16; // Snap to 16th notes
+      
+      // Ensure note doesn't extend beyond the grid (8 seconds total)
+      const maxDuration = 8 - note.time;
+      const clampedDuration = Math.min(newDuration, maxDuration);
+      const snappedDuration = Math.round(clampedDuration * 16) / 16; // Snap to 16th notes
       
       // Update the resized note's duration
       setNotes(prevNotes => 
@@ -245,11 +258,17 @@ const MIDIEditor: React.FC = () => {
       setSelectedNotes(newSelected);
     } else {
       // Add new note only if no existing note was found
+      // Clamp time to valid bounds, accounting for default note duration (0.25s)
+      const defaultDuration = 0.25;
+      const maxStartTime = 8 - defaultDuration; // Ensure note doesn't extend beyond 8 seconds
+      const clampedTime = Math.max(0, Math.min(maxStartTime, time));
+      const snappedTime = Math.round(clampedTime * 16) / 16; // Snap to 16th notes
+      
       const newNote: Note = {
         id: Date.now().toString(),
         note,
-        time: Math.round(time * 16) / 16, // Snap to 16th notes
-        duration: 0.25,
+        time: snappedTime,
+        duration: defaultDuration,
         velocity: 0.8
       };
       
