@@ -132,6 +132,22 @@ const MIDIEditor: React.FC = () => {
     const note = notes.find(n => n.id === noteId);
     if (!note) return;
     
+    // Handle selection/deselection if Ctrl is held or if clicking on already selected note
+    if (event.ctrlKey || selectedNotes.has(noteId)) {
+      const newSelected = new Set(selectedNotes);
+      if (selectedNotes.has(noteId)) {
+        newSelected.delete(noteId);
+      } else {
+        newSelected.add(noteId);
+      }
+      setSelectedNotes(newSelected);
+      
+      // If we deselected the note, don't start dragging
+      if (selectedNotes.has(noteId) && event.ctrlKey) {
+        return;
+      }
+    }
+    
     const notePosition = noteToGrid(note.note, note.time);
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
@@ -143,8 +159,8 @@ const MIDIEditor: React.FC = () => {
       y: mouseY - notePosition.y
     });
     
-    // Select the note being dragged if not already selected
-    if (!selectedNotes.has(noteId)) {
+    // Select the note being dragged if not already selected and not holding Ctrl
+    if (!selectedNotes.has(noteId) && !event.ctrlKey) {
       setSelectedNotes(new Set([noteId]));
     }
   }, [notes, selectedNotes, noteToGrid]);
@@ -284,8 +300,8 @@ const MIDIEditor: React.FC = () => {
     setSelectionStart({ x: 0, y: 0 });
     setSelectionEnd({ x: 0, y: 0 });
     
-    // Set flag to prevent immediate grid click after drag/resize
-    if (wasDragging || wasResizing) {
+    // Set flag to prevent immediate grid click after drag/resize/select
+    if (wasDragging || wasResizing || wasSelecting) {
       setJustFinishedDrag(true);
       // Clear the flag after a short delay
       setTimeout(() => {
@@ -298,17 +314,12 @@ const MIDIEditor: React.FC = () => {
   const handleGridClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     if (!gridRef.current || isDragging || isResizing || justFinishedDrag) return; // Don't add notes while dragging, resizing, or just after
     
+    // Skip if we're in selection mode (Ctrl was held)
+    if (isSelecting) return;
+    
     const rect = gridRef.current.getBoundingClientRect();
     const x = event.clientX - rect.left + gridRef.current.scrollLeft; // Account for scroll position
     const y = event.clientY - rect.top;
-    
-    // Check if Ctrl is held for selection box
-    if (event.ctrlKey) {
-      setIsSelecting(true);
-      setSelectionStart({ x, y });
-      setSelectionEnd({ x, y });
-      return;
-    }
     
     const { note, time } = gridToNote(x, y);
     
@@ -331,31 +342,53 @@ const MIDIEditor: React.FC = () => {
     if (clickedNote) {
       // Select/deselect note
       const newSelected = new Set(selectedNotes);
-      if (newSelected.has(clickedNote.id)) {
+      if (selectedNotes.has(clickedNote.id)) {
         newSelected.delete(clickedNote.id);
       } else {
         newSelected.add(clickedNote.id);
       }
       setSelectedNotes(newSelected);
     } else {
-      // Add new note only if no existing note was found
-      // Clamp time to valid bounds, accounting for default note duration (0.25s)
-      const defaultDuration = 0.25;
-      const maxStartTime = 8 - defaultDuration; // Ensure note doesn't extend beyond 8 seconds
-      const clampedTime = Math.max(0, Math.min(maxStartTime, time));
-      const snappedTime = Math.round(clampedTime * 16) / 16; // Snap to 16th notes
-      
-      const newNote: Note = {
-        id: Date.now().toString(),
-        note,
-        time: snappedTime,
-        duration: defaultDuration,
-        velocity: 0.8
-      };
-      
-      setNotes(prev => [...prev, newNote]);
+      // Add new note only if no existing note was found and not during/after selection
+      if (!isSelecting) {
+        // Clamp time to valid bounds, accounting for default note duration (0.25s)
+        const defaultDuration = 0.25;
+        const maxStartTime = 8 - defaultDuration; // Ensure note doesn't extend beyond 8 seconds
+        const clampedTime = Math.max(0, Math.min(maxStartTime, time));
+        const snappedTime = Math.round(clampedTime * 16) / 16; // Snap to 16th notes
+        
+        const newNote: Note = {
+          id: Date.now().toString(),
+          note,
+          time: snappedTime,
+          duration: defaultDuration,
+          velocity: 0.8
+        };
+        
+        setNotes(prev => [...prev, newNote]);
+        
+        // Automatically select the newly created note
+        setSelectedNotes(new Set([newNote.id]));
+      }
     }
-  }, [notes, selectedNotes, gridToNote, noteToGrid, isDragging, isResizing, justFinishedDrag]);
+  }, [notes, selectedNotes, gridToNote, noteToGrid, isDragging, isResizing, justFinishedDrag, isSelecting]);
+  
+  // Handle grid mouse down for immediate selection start
+  const handleGridMouseDown = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    if (!gridRef.current || isDragging || isResizing || justFinishedDrag) return;
+    
+    // Check if Ctrl is held for selection box - start immediately on mouse down
+    if (event.ctrlKey) {
+      const rect = gridRef.current.getBoundingClientRect();
+      const x = event.clientX - rect.left + gridRef.current.scrollLeft;
+      const y = event.clientY - rect.top;
+      
+      setIsSelecting(true);
+      setSelectionStart({ x, y });
+      setSelectionEnd({ x, y });
+      event.preventDefault(); // Prevent default behavior
+    }
+  }, [isDragging, isResizing, justFinishedDrag]);
   
   // Handle key press for piano keys
   const handleKeyPress = useCallback(async (note: string) => {
@@ -439,6 +472,7 @@ const MIDIEditor: React.FC = () => {
           <div 
             className="grid-content"
             ref={gridRef}
+            onMouseDown={handleGridMouseDown}
             onClick={handleGridClick}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
