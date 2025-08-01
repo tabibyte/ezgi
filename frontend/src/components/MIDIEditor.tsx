@@ -21,6 +21,9 @@ const MIDIEditor: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [draggedNote, setDraggedNote] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizedNote, setResizedNote] = useState<string | null>(null);
+  const [justFinishedDrag, setJustFinishedDrag] = useState(false);
   
   const gridRef = useRef<HTMLDivElement>(null);
   const synthRef = useRef<Tone.Synth | null>(null);
@@ -119,41 +122,95 @@ const MIDIEditor: React.FC = () => {
     }
   }, [notes, selectedNotes, noteToGrid]);
 
-  // Handle mouse move for dragging
+  // Handle resize handle mouse down
+  const handleResizeMouseDown = useCallback((event: React.MouseEvent, noteId: string) => {
+    event.stopPropagation(); // Prevent grid click and note drag
+    
+    const note = notes.find(n => n.id === noteId);
+    if (!note) return;
+    
+    setIsResizing(true);
+    setResizedNote(noteId);
+    
+    // Select the note being resized if not already selected
+    if (!selectedNotes.has(noteId)) {
+      setSelectedNotes(new Set([noteId]));
+    }
+  }, [notes, selectedNotes]);
+
+  // Handle mouse move for dragging and resizing
   const handleMouseMove = useCallback((event: React.MouseEvent) => {
-    if (!isDragging || !draggedNote || !gridRef.current) return;
+    if (!gridRef.current) return;
     
     const rect = gridRef.current.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
     
-    // Calculate new position accounting for drag offset
-    const newX = mouseX - dragOffset.x;
-    const newY = mouseY - dragOffset.y;
-    
-    // Convert back to note and time
-    const { note, time } = gridToNote(newX, newY);
-    
-    // Update the dragged note's position
-    setNotes(prevNotes => 
-      prevNotes.map(n => 
-        n.id === draggedNote 
-          ? { ...n, note, time: Math.round(time * 16) / 16 } // Snap to 16th notes
-          : n
-      )
-    );
-  }, [isDragging, draggedNote, dragOffset, gridToNote]);
+    if (isDragging && draggedNote) {
+      // Handle note dragging
+      const newX = mouseX - dragOffset.x;
+      const newY = mouseY - dragOffset.y;
+      
+      // Convert back to note and time
+      const { note, time } = gridToNote(newX, newY);
+      
+      // Update the dragged note's position
+      setNotes(prevNotes => 
+        prevNotes.map(n => 
+          n.id === draggedNote 
+            ? { ...n, note, time: Math.round(time * 16) / 16 } // Snap to 16th notes
+            : n
+        )
+      );
+    } else if (isResizing && resizedNote) {
+      // Handle note resizing
+      const note = notes.find(n => n.id === resizedNote);
+      if (!note) return;
+      
+      const notePosition = noteToGrid(note.note, note.time);
+      const gridWidth = gridRef.current?.clientWidth || 1;
+      const measureWidth = gridWidth / 32; // 32 measures total
+      
+      // Calculate new duration based on mouse position
+      const newWidth = mouseX - notePosition.x;
+      const newDuration = Math.max(0.0625, (newWidth / measureWidth) * 0.25); // Minimum 1/16 note
+      const snappedDuration = Math.round(newDuration * 16) / 16; // Snap to 16th notes
+      
+      // Update the resized note's duration
+      setNotes(prevNotes => 
+        prevNotes.map(n => 
+          n.id === resizedNote 
+            ? { ...n, duration: snappedDuration }
+            : n
+        )
+      );
+    }
+  }, [isDragging, draggedNote, dragOffset, gridToNote, isResizing, resizedNote, notes, noteToGrid]);
 
-  // Handle mouse up to end dragging
+  // Handle mouse up to end dragging or resizing
   const handleMouseUp = useCallback(() => {
+    const wasDragging = isDragging;
+    const wasResizing = isResizing;
+    
     setIsDragging(false);
     setDraggedNote(null);
     setDragOffset({ x: 0, y: 0 });
-  }, []);
+    setIsResizing(false);
+    setResizedNote(null);
+    
+    // Set flag to prevent immediate grid click after drag/resize
+    if (wasDragging || wasResizing) {
+      setJustFinishedDrag(true);
+      // Clear the flag after a short delay
+      setTimeout(() => {
+        setJustFinishedDrag(false);
+      }, 50);
+    }
+  }, [isDragging, isResizing]);
 
   // Handle grid click to add/select notes
   const handleGridClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-    if (!gridRef.current || isDragging) return; // Don't add notes while dragging
+    if (!gridRef.current || isDragging || isResizing || justFinishedDrag) return; // Don't add notes while dragging, resizing, or just after
     
     const rect = gridRef.current.getBoundingClientRect();
     const x = event.clientX - rect.left + gridRef.current.scrollLeft; // Account for scroll position
@@ -198,7 +255,7 @@ const MIDIEditor: React.FC = () => {
       
       setNotes(prev => [...prev, newNote]);
     }
-  }, [notes, selectedNotes, gridToNote, noteToGrid]);
+  }, [notes, selectedNotes, gridToNote, noteToGrid, isDragging, isResizing, justFinishedDrag]);
   
   // Handle key press for piano keys
   const handleKeyPress = useCallback(async (note: string) => {
@@ -298,6 +355,12 @@ const MIDIEditor: React.FC = () => {
                       onMouseDown={(e) => handleNoteMouseDown(e, note.id)}
                     >
                       {note.note}
+                      {/* Resize handle */}
+                      <div
+                        className="note-resize-handle"
+                        onMouseDown={(e) => handleResizeMouseDown(e, note.id)}
+                        title="Drag to resize note duration"
+                      />
                     </div>
                   );
                 })}
