@@ -74,6 +74,7 @@ Uygulamanın son sprint'te ulaşması hedeflenen nihai özellikleri ve kapsamı 
 Bu sprint'e 150 puan verilmesinin sebebi, projenin back-end altyapısının tamamen bitirilmesi, Google Gemini gibi güçlü bir yapay zeka modelinin entegre edilmesi ve projenin tamamlandığını gösteren tanıtım videosu gibi kritik çıktıların üretilmesidir. Bu adımlar, projeyi konsept aşamasından çalışan bir prototipe taşıyan son ve en önemli aşamayı temsil etmektedir.
 
 **Daily Scrum Ekran Görüntüleri:**(https://drive.google.com/drive/folders/1Jd2nyUD7zjwvqztG85vA3946scZYu0GM?usp=sharing)
+
 **Sprintler İçin Trello Ekran Görüntüsü:** 
 ![WhatsApp Image 2025-08-03 at 18 11 46](https://github.com/user-attachments/assets/e00d84db-4961-4c03-b464-34d8fa4c10c9)
 
