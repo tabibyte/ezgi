@@ -497,6 +497,52 @@ body {
   backdrop-filter: blur(10px);
 }
 
+/* Minimize functionality styles */
+.playback-controls.minimized {
+  min-width: auto;
+  padding: 8px 12px;
+}
+
+.playback-controls.minimized .playback-controls-container {
+  justify-content: center;
+}
+
+.minimize-arrowhead {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 14px;
+  background: rgba(30, 30, 46, 0.9);
+  border: 1px solid rgba(120, 119, 198, 0.3);
+  border-radius: 0 0 8px 8px;
+  border-top: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  z-index: 1;
+  color: #ffffff;
+}
+
+.minimize-arrowhead:hover {
+  opacity: 1;
+  background: rgba(30, 30, 46, 1);
+  border-color: rgba(120, 119, 198, 0.6);
+}
+
+.playback-controls.minimized .minimize-arrowhead {
+  bottom: auto;
+  top: -12px;
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
+  border-top: 1px solid rgba(120, 119, 198, 0.3);
+}
+
 .bpm-btn {
   width: 24px;
   height: 24px;

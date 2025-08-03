@@ -16,6 +16,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
   const [bpm, setBpm] = useState(120); // Default BPM
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const timeoutRefs = useRef<number[]>([]);
   const isPlayingRef = useRef(false);
@@ -112,6 +113,11 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
     });
   }, []);
 
+  // Handle minimize toggle
+  const handleMinimizeToggle = useCallback(() => {
+    setIsMinimized(!isMinimized);
+  }, [isMinimized]);
+
   // Clean up on unmount
   useEffect(() => {
     return () => {
@@ -120,9 +126,9 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
   }, [clearAllTimeouts]);
 
   return (
-    <div className="playback-controls">
+    <div className={`playback-controls ${isMinimized ? 'minimized' : ''}`}>
       <div className="playback-controls-container">
-        {/* Play/Pause Button */}
+        {/* Play/Pause Button - Always visible */}
         <button 
           className={`playback-btn play-pause-btn ${isPlaying ? 'playing' : ''}`}
           onClick={handlePlayPause}
@@ -140,7 +146,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
           )}
         </button>
 
-        {/* Stop Button */}
+        {/* Stop Button - Always visible */}
         <button 
           className="playback-btn stop-btn"
           onClick={stopPlayback}
@@ -152,44 +158,64 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
           </svg>
         </button>
 
-        {/* Loop Button */}
-        <button 
-          className={`playback-btn loop-btn ${isLooping ? 'active' : ''}`}
-          onClick={handleLoopToggle}
-          title="Toggle Loop"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7z"/>
-            <path d="M17 17H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>
-          </svg>
-        </button>
+        {/* Additional controls hidden when minimized */}
+        {!isMinimized && (
+          <>
+            {/* Loop Button */}
+            <button 
+              className={`playback-btn loop-btn ${isLooping ? 'active' : ''}`}
+              onClick={handleLoopToggle}
+              title="Toggle Loop"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7z"/>
+                <path d="M17 17H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>
+              </svg>
+            </button>
 
-        {/* BPM Controls */}
-        <div className="bpm-controls">
-          <button 
-            className="bpm-btn bpm-decrease"
-            onClick={() => handleBpmChange(-5)}
-            title="Decrease BPM"
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 13H5v-2h14v2z"/>
-            </svg>
-          </button>
-          <div className="bpm-display">
-            <span className="bpm-value">{bpm}</span>
-            <span className="bpm-label">BPM</span>
-          </div>
-          <button 
-            className="bpm-btn bpm-increase"
-            onClick={() => handleBpmChange(5)}
-            title="Increase BPM"
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-            </svg>
-          </button>
-        </div>
+            {/* BPM Controls */}
+            <div className="bpm-controls">
+              <button 
+                className="bpm-btn bpm-decrease"
+                onClick={() => handleBpmChange(-5)}
+                title="Decrease BPM"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 13H5v-2h14v2z"/>
+                </svg>
+              </button>
+              <div className="bpm-display">
+                <span className="bpm-value">{bpm}</span>
+                <span className="bpm-label">BPM</span>
+              </div>
+              <button 
+                className="bpm-btn bpm-increase"
+                onClick={() => handleBpmChange(5)}
+                title="Increase BPM"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+              </button>
+            </div>
+          </>
+        )}
       </div>
+
+      {/* Minimize/Expand Arrowhead Indicator */}
+      <button 
+        className="minimize-arrowhead"
+        onClick={handleMinimizeToggle}
+        title={isMinimized ? 'Expand controls' : 'Minimize controls'}
+      >
+        <svg width="12" height="8" viewBox="0 0 12 8" fill="currentColor">
+          {isMinimized ? (
+            <path d="M6 8L0 2h12L6 8z"/>
+          ) : (
+            <path d="M6 0L12 6H0L6 0z"/>
+          )}
+        </svg>
+      </button>
     </div>
   );
 };
