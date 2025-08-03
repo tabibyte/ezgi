@@ -15,7 +15,12 @@ interface GridPosition {
   y: number;
 }
 
-const MIDIEditor: React.FC = () => {
+interface MIDIEditorProps {
+  onNotesChange?: (notes: Note[]) => void;
+  externalNotes?: Note[];
+}
+
+const MIDIEditor: React.FC<MIDIEditorProps> = ({ onNotesChange, externalNotes }) => {
   const [notes, setNotes] = useState<Note[]>([]);
   
   const [selectedNotes, setSelectedNotes] = useState<Set<string>>(new Set());
@@ -73,6 +78,25 @@ const MIDIEditor: React.FC = () => {
       samplerRef.current?.dispose();
     };
   }, []);
+
+  // Handle external notes from AI generation
+  useEffect(() => {
+    if (externalNotes && externalNotes.length > 0) {
+      console.log('🎼 MIDI Editor received external notes:', externalNotes);
+      setNotes(prevNotes => {
+        const newNotes = [...prevNotes, ...externalNotes];
+        console.log('🎵 Updated notes in MIDI Editor:', newNotes);
+        return newNotes;
+      });
+    }
+  }, [externalNotes]);
+
+  // Notify parent component when notes change
+  useEffect(() => {
+    if (onNotesChange) {
+      onNotesChange(notes);
+    }
+  }, [notes, onNotesChange]);
   
   // Convert grid position to note and time
   const gridToNote = useCallback((x: number, y: number): { note: string, time: number } => {
