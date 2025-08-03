@@ -45,12 +45,16 @@ Bu proje MIT Lisansı altında lisanslanmıştır - ayrıntılar için [LICENSE]
 **Sprint İçinde Tamamlanması Tahmin Edilen Puan:** 150 Puan
 **Toplam Puan:** 400 Puan. Bu sprint'e 150 puan verilmesinin sebebi, uygulamanın interaktif müzik oluşturma vizyonunun temel taşı olan MIDI editörünün hem tasarımsal hem de fonksiyonel olarak hayata geçirilmesi ve chatbot'un yapay zeka ile akıllandırılmasıdır. Bu, projenin en kritik ve emek yoğun aşamalarından birini oluşturmaktadır.
 
-**Daily Scrum Ekran Görüntüleri:** [Daily Scrum whatsapp görüntülerinin bulunduğu Drive klasör linki buraya eklenecek]
-**Sprintler İçin Trello Ekran Görüntüsü:** [Trello panosunun ekran görüntüsü linki buraya eklenecek]
+**Daily Scrum Ekran Görüntüleri:** [
+](https://drive.google.com/drive/folders/1pC5G4g5QXCaIotjr9NNeLzXA3n3tBJAl?usp=sharing)
+
+**Sprintler İçin Trello Ekran Görüntüsü:** <img width="1440" height="819" alt="Ekran Resmi 2025-08-03 22 17 10" src="https://github.com/user-attachments/assets/d726f22a-1576-4a6a-a098-b8541ec02d19" />
+
 
 **Uygulama Tanıtımı:** Müzik teorisi eğitimini yapay zeka destekli müzik üretimiyle birleştirmeyi hedefleyen yenilikçi bir uygulamadır. Bu platform, kullanıcıların müzik teorisinin temel prensiplerini anlamalarını kolaylaştırırken, aynı zamanda kendi müzikal fikirlerini hayata geçirmelerine olanak tanımayı amaçlamaktadır. Bu sprint'te geliştirilen MIDI editörü sayesinde, kullanıcıların notaları düzenleyebilmesine, kendi bestelerini oluşturabilmesine ve yapay zekanın önerileriyle müziklerini geliştirebilmesine olanak tanıyacak interaktif piyano ve besteleme modülünün temelleri atılmıştır. Temel amacımız, müzik teorisi bilgisi olmayan kullanıcıların dahi kendi müziklerini oluşturabilmelerini sağlayarak, müzik eğitimini daha erişilebilir, interaktif ve keyifli hale getirmektir.
 
-**Ürün Durum Görüntüsü:** [Uygulamanın güncel durumunu gösteren ekran görüntüsü veya video linki buraya eklenecek]
+**Ürün Durum Görüntüsü:** ![WhatsApp Image 2025-07-31 at 22 56 59 (1)](https://github.com/user-attachments/assets/86cbe7a7-4ea6-4120-9813-ab59ac814b06)
+
 
 **Sprint Review:** İkinci sprint'imizi, projemizin etkileşimli ve yaratıcı vizyonunu gerçeğe dönüştüren önemli adımlarla tamamladık. Bu sprint'te, kullanıcıların kendi müziklerini oluşturmasına olanak tanıyacak olan MIDI editörünün tasarımını, ön yüz (front-end) ve arka yüz (back-end) kodlamasını başarıyla bitirdik. Ayrıca, yapay zeka destekli chatbot'u aktif hale getirdik ve gelecekteki geliştirmeler için kullanıcı hikayeleri ile kabul kriterlerini netleştirdik. Bu adımlar, uygulamamızın temel işlevselliğini önemli ölçüde artırmıştır.
 
@@ -61,3 +65,39 @@ Daily Scrum toplantılarına daha fazla özen gösterilmesi ve katılımın art�
 Ekip içi senkronizasyonu artırmak amacıyla sabit toplantı günleri ve saatleri belirlendi.
 
 Uygulamanın son sprint'te ulaşması hedeflenen nihai özellikleri ve kapsamı üzerine verimli bir tartışma gerçekleştirildi.
+
+# Sprint3 (Final Sprint)
+
+- **Sprint notları**: Son sprint'te projemizin temel taşlarını tamamlayarak uygulamayı nihai hedefine ulaştırdık. MIDI editörünün son tasarımsal dokunuşları yapılırken, tüm uygulamanın beyni olan back-end kodlaması tamamlandı. En kritik teknolojik adımlardan biri olarak, yapay zeka destekli müzik öneri motoru için Google Gemini API entegrasyonu başarıyla hayata geçirildi. Projenin paydaşlara ve potansiyel kullanıcılara sunulabilmesi için kapsamlı bir tanıtım videosu çekildi. Ayrıca, geliştirme sürecinin son aşamasına rehberlik etmesi amacıyla nihai kullanıcı hikayeleri ve kabul kriterleri oluşturuldu.
+
+**Sprint İçinde Tamamlanması Tahmin Edilen Puan:** 150 Puan
+- **Toplam Puan**: 400 Puan.
+Bu sprint'e 150 puan verilmesinin sebebi, projenin back-end altyapısının tamamen bitirilmesi, Google Gemini gibi güçlü bir yapay zeka modelinin entegre edilmesi ve projenin tamamlandığını gösteren tanıtım videosu gibi kritik çıktıların üretilmesidir. Bu adımlar, projeyi konsept aşamasından çalışan bir prototipe taşıyan son ve en önemli aşamayı temsil etmektedir.
+
+**Daily Scrum Ekran Görüntüleri:**[
+](https://drive.google.com/drive/folders/1Jd2nyUD7zjwvqztG85vA3946scZYu0GM?usp=sharing)
+**Sprintler İçin Trello Ekran Görüntüsü:** 
+![WhatsApp Image 2025-08-03 at 18 11 46](https://github.com/user-attachments/assets/e00d84db-4961-4c03-b464-34d8fa4c10c9)
+
+**Uygulama Tanıtımı**
+Müzik teorisi eğitimini yapay zeka destekli müzik üretimiyle birleştirmeyi hedefleyen yenilikçi bir uygulamadır. Bu platform, kullanıcıların müzik teorisinin temel prensiplerini anlamalarını kolaylaştırırken, aynı zamanda kendi müzikal fikirlerini hayata geçirmelerine olanak tanımayı amaçlamaktadır. Bu son sprint'te tamamlanan back-end altyapısı ve Google Gemini API entegrasyonu sayesinde, yapay zeka modülümüz artık çok daha yaratıcı ve isabetli müzikal öneriler sunabilmektedir. Kullanıcılar, tamamlanmış MIDI editöründe bestelerini oluştururken, Gemini destekli yapay zekadan ilham alarak müziklerini bir üst seviyeye taşıyabilecekler. Temel amacımız olan, müzik bilgisi olmayanların dahi kendi özgün eserlerini yaratabildiği, erişilebilir ve keyifli bir müzik platformu oluşturma vizyonumuzu bu sprint ile gerçekleştirmiş bulunuyoruz.
+
+**Kullanıcı Hikayeleri:** [
+](https://drive.google.com/drive/folders/1rEDr4frzY9aSQVrG3E6-7WrGe77ktARG?usp=sharing)
+
+**Ürün Durum Görüntüsü:** [
+](https://ezgilab.vercel.app/)
+<img width="1440" height="813" alt="Ekran Resmi 2025-08-03 22 35 22" src="https://github.com/user-attachments/assets/d79d8bad-4d26-4c28-aabb-ee8d07ac2340" />
+
+
+**Tanıtım Videosu:**
+
+**Sprint Review (Proje Final Sunumu)**
+Projemizin üçüncü ve son sprint'ini, uygulamamızı fikir aşamasından tamamen işlevsel bir prototipe dönüştüren nihai adımlarla başarıyla tamamladık. Bu sprint boyunca, uygulamanın tüm back-end kodlamasını bitirdik ve en önemlisi, yapay zeka özelliklerimizi Google Gemini API ile güçlendirdik. MIDI editörünün tasarımı son haline getirildi ve projenin tüm yeteneklerini sergileyen bir tanıtım videosu hazırladık. Kullanıcı hikayeleri ve kabul kriterlerinin son hali de tanımlanarak projenin hedeflenen kapsama ulaştığı teyit edildi. Bu sprint sonunda, projemiz başlangıçta belirlenen tüm ana hedeflere ulaşmış ve sunuma hazır hale gelmiştir.
+
+**Sprint Retrospective (Proje Değerlendirmesi)**
+Google Gemini API gibi yeni ve güçlü bir teknolojiyi entegre etme sürecinin ekip için harika bir öğrenme deneyimi olduğu ve projenin değerini önemli ölçüde artırdığı konusunda hemfikir olundu.
+
+Projenin başarıyla tamamlanmasının ardından, potansiyel kullanıcı testleri ve geri bildirimlerle uygulamaya eklenebilecek "versiyon 2.0" özellikleri üzerine kısa bir beyin fırtınası yapıldı.
+
+Tanıtım videosu çekim sürecinin, projenin tüm özelliklerini bir bütün olarak görmemizi sağladığı ve motivasyonu artırdığı belirtildi. Ekip, projenin ulaştığı son noktadan gurur duyduğunu ifade etti.
