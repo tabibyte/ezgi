@@ -86,8 +86,6 @@ Müzik teorisi eğitimini yapay zeka destekli müzik üretimiyle birleştirmeyi 
 <img width="1440" height="813" alt="Ekran Resmi 2025-08-03 22 35 22" src="https://github.com/user-attachments/assets/d79d8bad-4d26-4c28-aabb-ee8d07ac2340" />
 
 
-**Tanıtım Videosu:**
-
 **Sprint Review (Proje Final Sunumu)**
 Projemizin üçüncü ve son sprint'ini, uygulamamızı fikir aşamasından tamamen işlevsel bir prototipe dönüştüren nihai adımlarla başarıyla tamamladık. Bu sprint boyunca, uygulamanın tüm back-end kodlamasını bitirdik ve en önemlisi, yapay zeka özelliklerimizi Google Gemini API ile güçlendirdik. MIDI editörünün tasarımı son haline getirildi ve projenin tüm yeteneklerini sergileyen bir tanıtım videosu hazırladık. Kullanıcı hikayeleri ve kabul kriterlerinin son hali de tanımlanarak projenin hedeflenen kapsama ulaştığı teyit edildi. Bu sprint sonunda, projemiz başlangıçta belirlenen tüm ana hedeflere ulaşmış ve sunuma hazır hale gelmiştir.
 
