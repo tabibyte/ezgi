@@ -68,7 +68,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
 
         // Check if playback is complete
         if (elapsed >= totalDuration) {
-          if (isLooping) {
+          if (isLooping && isPlaying) { // Only restart if still playing (not paused)
             // Restart playback
             playNotes();
           } else {
@@ -81,7 +81,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
       console.error('Error during playback:', error);
       stopPlayback();
     }
-  }, [sampler, notes, totalDuration, isLooping, clearAllTimeouts, stopPlayback]);
+  }, [sampler, notes, totalDuration, isLooping, isPlaying, clearAllTimeouts, stopPlayback]);
 
   // Handle play/pause
   const handlePlayPause = useCallback(async () => {

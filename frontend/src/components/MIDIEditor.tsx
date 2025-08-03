@@ -133,19 +133,17 @@ const MIDIEditor: React.FC = () => {
     const note = notes.find(n => n.id === noteId);
     if (!note) return;
     
-    // Handle selection/deselection if Ctrl is held or if clicking on already selected note
-    if (event.ctrlKey || selectedNotes.has(noteId)) {
+    // Handle selection/deselection if Ctrl is held
+    if (event.ctrlKey) {
       const newSelected = new Set(selectedNotes);
       if (selectedNotes.has(noteId)) {
         newSelected.delete(noteId);
+        setSelectedNotes(newSelected);
+        // If we deselected the note, don't start dragging
+        return;
       } else {
         newSelected.add(noteId);
-      }
-      setSelectedNotes(newSelected);
-      
-      // If we deselected the note, don't start dragging
-      if (selectedNotes.has(noteId) && event.ctrlKey) {
-        return;
+        setSelectedNotes(newSelected);
       }
     }
     
@@ -202,19 +200,47 @@ const MIDIEditor: React.FC = () => {
       const currentNote = notes.find(n => n.id === draggedNote);
       if (!currentNote) return;
       
-      // Clamp time to valid bounds, accounting for note duration
-      const maxStartTime = 8 - currentNote.duration; // Ensure note doesn't extend beyond 8 seconds
-      const clampedTime = Math.max(0, Math.min(maxStartTime, time));
-      const snappedTime = Math.round(clampedTime * 16) / 16; // Snap to 16th notes
+      // Calculate the change in position using note indices
+      const currentNoteIndex = pianoKeys.indexOf(currentNote.note);
+      const newNoteIndex = pianoKeys.indexOf(note);
+      const deltaNote = newNoteIndex - currentNoteIndex;
+      const deltaTime = time - currentNote.time;
       
-      // Update the dragged note's position
-      setNotes(prevNotes => 
-        prevNotes.map(n => 
-          n.id === draggedNote 
-            ? { ...n, note, time: snappedTime }
-            : n
-        )
-      );
+      // If multiple notes are selected, move them all together
+      if (selectedNotes.has(draggedNote) && selectedNotes.size > 1) {
+        setNotes(prevNotes => 
+          prevNotes.map(n => {
+            if (selectedNotes.has(n.id)) {
+              const currentIndex = pianoKeys.indexOf(n.note);
+              const newIndex = currentIndex + deltaNote;
+              const newTime = n.time + deltaTime;
+              
+              // Clamp each note to valid bounds
+              const clampedIndex = Math.max(0, Math.min(pianoKeys.length - 1, newIndex));
+              const clampedNote = pianoKeys[clampedIndex];
+              const maxStartTime = 8 - n.duration;
+              const clampedTime = Math.max(0, Math.min(maxStartTime, newTime));
+              const snappedTime = Math.round(clampedTime * 16) / 16;
+              
+              return { ...n, note: clampedNote, time: snappedTime };
+            }
+            return n;
+          })
+        );
+      } else {
+        // Single note dragging (original behavior)
+        const maxStartTime = 8 - currentNote.duration;
+        const clampedTime = Math.max(0, Math.min(maxStartTime, time));
+        const snappedTime = Math.round(clampedTime * 16) / 16;
+        
+        setNotes(prevNotes => 
+          prevNotes.map(n => 
+            n.id === draggedNote 
+              ? { ...n, note, time: snappedTime }
+              : n
+          )
+        );
+      }
     } else if (isResizing && resizedNote) {
       // Handle note resizing
       const note = notes.find(n => n.id === resizedNote);
@@ -228,24 +254,44 @@ const MIDIEditor: React.FC = () => {
       const newWidth = mouseX - notePosition.x;
       const newDuration = Math.max(0.0625, (newWidth / measureWidth) * 0.25); // Minimum 1/16 note
       
-      // Ensure note doesn't extend beyond the grid (8 seconds total)
-      const maxDuration = 8 - note.time;
-      const clampedDuration = Math.min(newDuration, maxDuration);
-      const snappedDuration = Math.round(clampedDuration * 16) / 16; // Snap to 16th notes
+      // Calculate the duration change ratio
+      const durationRatio = newDuration / note.duration;
       
-      // Update the resized note's duration
-      setNotes(prevNotes => 
-        prevNotes.map(n => 
-          n.id === resizedNote 
-            ? { ...n, duration: snappedDuration }
-            : n
-        )
-      );
+      // If multiple notes are selected, resize them all proportionally
+      if (selectedNotes.has(resizedNote) && selectedNotes.size > 1) {
+        setNotes(prevNotes => 
+          prevNotes.map(n => {
+            if (selectedNotes.has(n.id)) {
+              const scaledDuration = n.duration * durationRatio;
+              const minDuration = 0.0625; // Minimum 1/16 note
+              const maxDuration = 8 - n.time; // Don't extend beyond grid
+              const clampedDuration = Math.max(minDuration, Math.min(maxDuration, scaledDuration));
+              const snappedDuration = Math.round(clampedDuration * 16) / 16;
+              
+              return { ...n, duration: snappedDuration };
+            }
+            return n;
+          })
+        );
+      } else {
+        // Single note resizing (original behavior)
+        const maxDuration = 8 - note.time;
+        const clampedDuration = Math.min(newDuration, maxDuration);
+        const snappedDuration = Math.round(clampedDuration * 16) / 16;
+        
+        setNotes(prevNotes => 
+          prevNotes.map(n => 
+            n.id === resizedNote 
+              ? { ...n, duration: snappedDuration }
+              : n
+          )
+        );
+      }
     } else if (isSelecting) {
       // Handle selection box dragging
       setSelectionEnd({ x: mouseX, y: mouseY });
     }
-  }, [isDragging, draggedNote, dragOffset, gridToNote, isResizing, resizedNote, notes, noteToGrid, isSelecting]);
+  }, [isDragging, draggedNote, dragOffset, gridToNote, isResizing, resizedNote, notes, noteToGrid, isSelecting, selectedNotes]);
 
   // Handle mouse up to end dragging or resizing
   const handleMouseUp = useCallback(() => {
