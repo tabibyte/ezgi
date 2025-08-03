@@ -45,8 +45,7 @@ Bu proje MIT Lisansı altında lisanslanmıştır - ayrıntılar için [LICENSE]
 **Sprint İçinde Tamamlanması Tahmin Edilen Puan:** 150 Puan
 **Toplam Puan:** 400 Puan. Bu sprint'e 150 puan verilmesinin sebebi, uygulamanın interaktif müzik oluşturma vizyonunun temel taşı olan MIDI editörünün hem tasarımsal hem de fonksiyonel olarak hayata geçirilmesi ve chatbot'un yapay zeka ile akıllandırılmasıdır. Bu, projenin en kritik ve emek yoğun aşamalarından birini oluşturmaktadır.
 
-**Daily Scrum Ekran Görüntüleri:** [
-](https://drive.google.com/drive/folders/1pC5G4g5QXCaIotjr9NNeLzXA3n3tBJAl?usp=sharing)
+**Daily Scrum Ekran Görüntüleri:** (https://drive.google.com/drive/folders/1pC5G4g5QXCaIotjr9NNeLzXA3n3tBJAl?usp=sharing)
 
 **Sprintler İçin Trello Ekran Görüntüsü:** <img width="1440" height="819" alt="Ekran Resmi 2025-08-03 22 17 10" src="https://github.com/user-attachments/assets/d726f22a-1576-4a6a-a098-b8541ec02d19" />
 
@@ -74,19 +73,16 @@ Uygulamanın son sprint'te ulaşması hedeflenen nihai özellikleri ve kapsamı 
 - **Toplam Puan**: 400 Puan.
 Bu sprint'e 150 puan verilmesinin sebebi, projenin back-end altyapısının tamamen bitirilmesi, Google Gemini gibi güçlü bir yapay zeka modelinin entegre edilmesi ve projenin tamamlandığını gösteren tanıtım videosu gibi kritik çıktıların üretilmesidir. Bu adımlar, projeyi konsept aşamasından çalışan bir prototipe taşıyan son ve en önemli aşamayı temsil etmektedir.
 
-**Daily Scrum Ekran Görüntüleri:**[
-](https://drive.google.com/drive/folders/1Jd2nyUD7zjwvqztG85vA3946scZYu0GM?usp=sharing)
+**Daily Scrum Ekran Görüntüleri:**(https://drive.google.com/drive/folders/1Jd2nyUD7zjwvqztG85vA3946scZYu0GM?usp=sharing)
 **Sprintler İçin Trello Ekran Görüntüsü:** 
 ![WhatsApp Image 2025-08-03 at 18 11 46](https://github.com/user-attachments/assets/e00d84db-4961-4c03-b464-34d8fa4c10c9)
 
 **Uygulama Tanıtımı**
 Müzik teorisi eğitimini yapay zeka destekli müzik üretimiyle birleştirmeyi hedefleyen yenilikçi bir uygulamadır. Bu platform, kullanıcıların müzik teorisinin temel prensiplerini anlamalarını kolaylaştırırken, aynı zamanda kendi müzikal fikirlerini hayata geçirmelerine olanak tanımayı amaçlamaktadır. Bu son sprint'te tamamlanan back-end altyapısı ve Google Gemini API entegrasyonu sayesinde, yapay zeka modülümüz artık çok daha yaratıcı ve isabetli müzikal öneriler sunabilmektedir. Kullanıcılar, tamamlanmış MIDI editöründe bestelerini oluştururken, Gemini destekli yapay zekadan ilham alarak müziklerini bir üst seviyeye taşıyabilecekler. Temel amacımız olan, müzik bilgisi olmayanların dahi kendi özgün eserlerini yaratabildiği, erişilebilir ve keyifli bir müzik platformu oluşturma vizyonumuzu bu sprint ile gerçekleştirmiş bulunuyoruz.
 
-**Kullanıcı Hikayeleri:** [
-](https://drive.google.com/drive/folders/1rEDr4frzY9aSQVrG3E6-7WrGe77ktARG?usp=sharing)
+**Kullanıcı Hikayeleri:** (https://drive.google.com/drive/folders/1rEDr4frzY9aSQVrG3E6-7WrGe77ktARG?usp=sharing)
 
-**Ürün Durum Görüntüsü:** [
-](https://ezgilab.vercel.app/)
+**Ürün Durum Görüntüsü:** (https://ezgilab.vercel.app/)
 <img width="1440" height="813" alt="Ekran Resmi 2025-08-03 22 35 22" src="https://github.com/user-attachments/assets/d79d8bad-4d26-4c28-aabb-ee8d07ac2340" />
 
 
