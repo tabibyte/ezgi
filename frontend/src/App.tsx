@@ -8,9 +8,18 @@ import { geminiService, GeneratedNote } from './services/geminiService';
 function App() {
   const [generatedNotes, setGeneratedNotes] = useState<GeneratedNote[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [bpm, setBpm] = useState(120); // Add BPM state
 
-  const handleGenerate = async (type: 'melody' | 'chords' | 'both') => {
+  const handleGenerate = async (type: 'melody' | 'chords' | 'both' | 'clear') => {
     console.log('🎹 Generate button clicked:', type);
+    
+    // Handle clear action
+    if (type === 'clear') {
+      console.log('🗑️ Clearing all notes');
+      setGeneratedNotes([]);
+      return;
+    }
+    
     setIsGenerating(true);
     
     try {
@@ -61,13 +70,10 @@ function App() {
     <div className="App">
       {/* Full-screen MIDI Editor background */}
       <MIDIEditor 
-        externalNotes={generatedNotes.length > 0 ? generatedNotes : undefined}
-        onNotesChange={() => {
-          // Reset generated notes after they've been added to avoid duplication
-          if (generatedNotes.length > 0) {
-            setGeneratedNotes([]);
-          }
-        }}
+        externalNotes={generatedNotes}
+        replaceNotes={true}
+        bpm={bpm}
+        onBpmChange={setBpm}
       />
       
       {/* Floating Generate Button */}
@@ -77,7 +83,10 @@ function App() {
       />
       
       {/* Minimal AI Chatbot */}
-      <MinimalChatBot />
+      <MinimalChatBot 
+        generatedNotes={generatedNotes} 
+        bpm={bpm}
+      />
       
       {/* Floating controls and chat boxes - temporarily hidden */}
       {/* <FloatingControls /> */}

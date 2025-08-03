@@ -1072,6 +1072,21 @@ body {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
+.dropdown-option.clear-option {
+  color: #ff6b6b;
+}
+
+.dropdown-option.clear-option:hover {
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff8a8a;
+}
+
 @keyframes dropdownSlideUp {
   from {
     opacity: 0;
@@ -1157,9 +1172,19 @@ body {
   animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+.message.analysis {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-left: 3px solid #667eea;
+  margin: 8px 0;
+}
+
+.message-content {
+  line-height: 1.4;
+}
+
+.message-content strong {
+  color: #667eea;
+  font-weight: 600;
 }
 
 .minimize-toggle {
@@ -1258,4 +1283,40 @@ body {
 
 .send-button:hover:not(:disabled) {
   opacity: 0.9;
+}
+
+/* Typing indicator animation */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+}
+
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  display: inline-block;
+  animation: typing 1.4s ease-in-out infinite both;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typing {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

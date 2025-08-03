@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 interface FloatingGenerateButtonProps {
-  onGenerate: (type: 'melody' | 'chords' | 'both') => Promise<void> | void;
+  onGenerate: (type: 'melody' | 'chords' | 'both' | 'clear') => Promise<void> | void;
   isLoading?: boolean;
 }
 
@@ -26,7 +26,7 @@ const FloatingGenerateButton: React.FC<FloatingGenerateButtonProps> = ({
     };
   }, []);
 
-  const handleOptionClick = async (type: 'melody' | 'chords' | 'both') => {
+  const handleOptionClick = async (type: 'melody' | 'chords' | 'both' | 'clear') => {
     if (isLoading) return; // Prevent multiple concurrent generations
     
     await onGenerate(type);
@@ -69,6 +69,19 @@ const FloatingGenerateButton: React.FC<FloatingGenerateButtonProps> = ({
             <div className="option-content">
               <div className="option-title">Generate Both</div>
               <div className="option-desc">Create melody + chords</div>
+            </div>
+          </button>
+          
+          <div className="dropdown-divider"></div>
+          
+          <button 
+            className="dropdown-option clear-option"
+            onClick={() => handleOptionClick('clear')}
+          >
+            <div className="option-icon">🗑️</div>
+            <div className="option-content">
+              <div className="option-title">Clear All Notes</div>
+              <div className="option-desc">Remove all existing notes</div>
             </div>
           </button>
         </div>

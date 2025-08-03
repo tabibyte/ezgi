@@ -10,12 +10,18 @@ interface PlaybackControlsProps {
     velocity: number;
   }>;
   sampler?: Tone.Sampler | null;
+  bpm?: number;
+  onBpmChange?: (bpm: number) => void;
 }
 
-const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) => {
+const PlaybackControls: React.FC<PlaybackControlsProps> = ({ 
+  notes, 
+  sampler, 
+  bpm = 120, 
+  onBpmChange 
+}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
-  const [bpm, setBpm] = useState(120); // Default BPM
   const [isMinimized, setIsMinimized] = useState(false);
 
   const timeoutRefs = useRef<number[]>([]);
@@ -107,11 +113,11 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
 
   // Handle BPM change
   const handleBpmChange = useCallback((delta: number) => {
-    setBpm(prevBpm => {
-      const newBpm = Math.max(60, Math.min(200, prevBpm + delta)); // Clamp between 60-200 BPM
-      return newBpm;
-    });
-  }, []);
+    const newBpm = Math.max(60, Math.min(200, bpm + delta)); // Clamp between 60-200 BPM
+    if (onBpmChange) {
+      onBpmChange(newBpm);
+    }
+  }, [bpm, onBpmChange]);
 
   // Handle minimize toggle
   const handleMinimizeToggle = useCallback(() => {

@@ -18,9 +18,18 @@ interface GridPosition {
 interface MIDIEditorProps {
   onNotesChange?: (notes: Note[]) => void;
   externalNotes?: Note[];
+  replaceNotes?: boolean; // Whether to replace existing notes or add to them
+  bpm?: number;
+  onBpmChange?: (bpm: number) => void;
 }
 
-const MIDIEditor: React.FC<MIDIEditorProps> = ({ onNotesChange, externalNotes }) => {
+const MIDIEditor: React.FC<MIDIEditorProps> = ({ 
+  onNotesChange, 
+  externalNotes, 
+  replaceNotes = true,
+  bpm,
+  onBpmChange 
+}) => {
   const [notes, setNotes] = useState<Note[]>([]);
   
   const [selectedNotes, setSelectedNotes] = useState<Set<string>>(new Set());
@@ -81,17 +90,30 @@ const MIDIEditor: React.FC<MIDIEditorProps> = ({ onNotesChange, externalNotes })
 
   // Handle external notes from AI generation
   useEffect(() => {
-    if (externalNotes && externalNotes.length > 0) {
-      console.log('🎼 MIDI Editor received external notes:', externalNotes);
-      setNotes(prevNotes => {
-        const newNotes = [...prevNotes, ...externalNotes];
-        console.log('🎵 Updated notes in MIDI Editor:', newNotes);
-        return newNotes;
-      });
+    if (externalNotes !== undefined) {
+      if (externalNotes.length === 0) {
+        console.log('🗑️ Clearing all notes in MIDI Editor');
+        setNotes([]);
+      } else {
+        console.log('🎼 MIDI Editor received external notes:', externalNotes);
+        
+        if (replaceNotes) {
+          console.log('🔄 Replacing existing notes with new AI-generated content');
+          setNotes(externalNotes);
+          console.log('🎵 Replaced notes in MIDI Editor:', externalNotes);
+        } else {
+          console.log('➕ Adding AI-generated notes to existing notes');
+          setNotes(prevNotes => {
+            const newNotes = [...prevNotes, ...externalNotes];
+            console.log('🎵 Updated notes in MIDI Editor:', newNotes);
+            return newNotes;
+          });
+        }
+      }
     }
-  }, [externalNotes]);
+  }, [externalNotes, replaceNotes]);
 
-  // Notify parent component when notes change
+  // Notify parent component when notes change (only if callback provided)
   useEffect(() => {
     if (onNotesChange) {
       onNotesChange(notes);
@@ -513,7 +535,12 @@ const MIDIEditor: React.FC<MIDIEditorProps> = ({ onNotesChange, externalNotes })
   return (
     <div className="midi-editor-fullscreen">
       {/* Floating Playback Controls */}
-      <PlaybackControls notes={notes} sampler={samplerRef.current} />
+      <PlaybackControls 
+        notes={notes} 
+        sampler={samplerRef.current} 
+        bpm={bpm}
+        onBpmChange={onBpmChange}
+      />
       
       <div className="piano-roll-container">
         {/* Piano keys on the left */}
