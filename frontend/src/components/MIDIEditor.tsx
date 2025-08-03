@@ -145,6 +145,14 @@ const MIDIEditor: React.FC = () => {
         newSelected.add(noteId);
         setSelectedNotes(newSelected);
       }
+    } else {
+      // If not holding Ctrl and the note is already selected among multiple notes,
+      // keep the current selection to allow multi-note dragging
+      if (!selectedNotes.has(noteId)) {
+        // Only change selection if the note wasn't already selected
+        setSelectedNotes(new Set([noteId]));
+      }
+      // If the note is already selected, keep the current selection unchanged
     }
     
     const notePosition = noteToGrid(note.note, note.time);
@@ -157,11 +165,6 @@ const MIDIEditor: React.FC = () => {
       x: mouseX - notePosition.x,
       y: mouseY - notePosition.y
     });
-    
-    // Select the note being dragged if not already selected and not holding Ctrl
-    if (!selectedNotes.has(noteId) && !event.ctrlKey) {
-      setSelectedNotes(new Set([noteId]));
-    }
   }, [notes, selectedNotes, noteToGrid]);
 
   // Handle resize handle mouse down

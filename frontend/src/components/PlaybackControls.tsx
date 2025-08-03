@@ -15,12 +15,20 @@ interface PlaybackControlsProps {
 const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [totalDuration] = useState(8); // 8 seconds total duration
+  const [bpm, setBpm] = useState(120); // Default BPM
 
-  const intervalRef = useRef<number | null>(null);
   const timeoutRefs = useRef<number[]>([]);
-  const startTimeRef = useRef<number>(0);
+  const isPlayingRef = useRef(false);
+  const isLoopingRef = useRef(false);
+
+  // Update refs when state changes
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
+  useEffect(() => {
+    isLoopingRef.current = isLooping;
+  }, [isLooping]);
 
   // Clean up timeouts
   const clearAllTimeouts = useCallback(() => {
@@ -31,12 +39,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
   // Stop playback
   const stopPlayback = useCallback(() => {
     setIsPlaying(false);
-    setCurrentTime(0);
     clearAllTimeouts();
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
   }, [clearAllTimeouts]);
 
   // Play notes
@@ -50,38 +53,41 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
       }
 
       clearAllTimeouts();
-      startTimeRef.current = Date.now();
+
+      // Calculate tempo multiplier (120 BPM is the baseline)
+      const tempoMultiplier = 120 / bpm;
 
       // Schedule all notes
       notes.forEach(note => {
         const timeout = setTimeout(() => {
-          sampler.triggerAttackRelease(note.note, note.duration, undefined, note.velocity);
-        }, note.time * 1000); // Convert to milliseconds
+          sampler.triggerAttackRelease(note.note, note.duration * tempoMultiplier, undefined, note.velocity);
+        }, note.time * 1000 * tempoMultiplier); // Apply tempo to timing
 
         timeoutRefs.current.push(timeout);
       });
 
-      // Update current time display
-      intervalRef.current = setInterval(() => {
-        const elapsed = (Date.now() - startTimeRef.current) / 1000;
-        setCurrentTime(elapsed);
+      // Calculate the total duration and schedule loop/stop
+      const maxEndTime = Math.max(...notes.map(note => note.time + note.duration));
+      const adjustedDuration = maxEndTime * tempoMultiplier * 1000; // Convert to milliseconds
 
-        // Check if playback is complete
-        if (elapsed >= totalDuration) {
-          if (isLooping && isPlaying) { // Only restart if still playing (not paused)
-            // Restart playback
-            playNotes();
-          } else {
-            stopPlayback();
-          }
+      const endTimeout = setTimeout(() => {
+        // Use refs to check current state
+        if (isLoopingRef.current && isPlayingRef.current) {
+          // Restart playback
+          playNotes();
+        } else {
+          // Stop playback
+          stopPlayback();
         }
-      }, 100);
+      }, adjustedDuration);
+
+      timeoutRefs.current.push(endTimeout);
 
     } catch (error) {
       console.error('Error during playback:', error);
       stopPlayback();
     }
-  }, [sampler, notes, totalDuration, isLooping, isPlaying, clearAllTimeouts, stopPlayback]);
+  }, [sampler, notes, isLooping, isPlaying, clearAllTimeouts, stopPlayback, bpm]);
 
   // Handle play/pause
   const handlePlayPause = useCallback(async () => {
@@ -98,20 +104,18 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
     setIsLooping(!isLooping);
   }, [isLooping]);
 
-  // Format time for display
-  const formatTime = useCallback((time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  // Handle BPM change
+  const handleBpmChange = useCallback((delta: number) => {
+    setBpm(prevBpm => {
+      const newBpm = Math.max(60, Math.min(200, prevBpm + delta)); // Clamp between 60-200 BPM
+      return newBpm;
+    });
   }, []);
 
   // Clean up on unmount
   useEffect(() => {
     return () => {
       clearAllTimeouts();
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
     };
   }, [clearAllTimeouts]);
 
@@ -160,21 +164,30 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({ notes, sampler }) =
           </svg>
         </button>
 
-        {/* Time Display */}
-        <div className="time-display">
-          <span className="current-time">{formatTime(currentTime)}</span>
-          <span className="time-separator">/</span>
-          <span className="total-time">{formatTime(totalDuration)}</span>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="progress-container">
-          <div 
-            className="progress-bar"
-            style={{
-              width: `${(currentTime / totalDuration) * 100}%`
-            }}
-          />
+        {/* BPM Controls */}
+        <div className="bpm-controls">
+          <button 
+            className="bpm-btn bpm-decrease"
+            onClick={() => handleBpmChange(-5)}
+            title="Decrease BPM"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 13H5v-2h14v2z"/>
+            </svg>
+          </button>
+          <div className="bpm-display">
+            <span className="bpm-value">{bpm}</span>
+            <span className="bpm-label">BPM</span>
+          </div>
+          <button 
+            className="bpm-btn bpm-increase"
+            onClick={() => handleBpmChange(5)}
+            title="Increase BPM"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
