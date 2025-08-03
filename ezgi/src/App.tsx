@@ -68,6 +68,7 @@ function App() {
 
   return (
     <div className="App">
+      {/* Mobile Warning */}
       {/* Full-screen MIDI Editor background */}
       <MIDIEditor 
         externalNotes={generatedNotes}
