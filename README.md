@@ -45,8 +45,7 @@ Bu proje MIT Lisansı altında lisanslanmıştır - ayrıntılar için [LICENSE]
 **Sprint İçinde Tamamlanması Tahmin Edilen Puan:** 150 Puan
 **Toplam Puan:** 400 Puan. Bu sprint'e 150 puan verilmesinin sebebi, uygulamanın interaktif müzik oluşturma vizyonunun temel taşı olan MIDI editörünün hem tasarımsal hem de fonksiyonel olarak hayata geçirilmesi ve chatbot'un yapay zeka ile akıllandırılmasıdır. Bu, projenin en kritik ve emek yoğun aşamalarından birini oluşturmaktadır.
 
-**Daily Scrum Ekran Görüntüleri:** 
-
+**Daily Scrum Ekran Görüntüleri:**(https://drive.google.com/file/d/1GU884iqAd58XZ_cEIqjn2A20ufmf2wQX/view?usp=sharing)
 **Sprintler İçin Trello Ekran Görüntüsü:** <img width="1440" height="819" alt="Ekran Resmi 2025-08-03 22 17 10" src="https://github.com/user-attachments/assets/d726f22a-1576-4a6a-a098-b8541ec02d19" />
 
 
