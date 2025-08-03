@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import * as Tone from 'tone';
+import PlaybackControls from './PlaybackControls';
 
 interface Note {
   id: string;
@@ -438,6 +439,9 @@ const MIDIEditor: React.FC = () => {
 
   return (
     <div className="midi-editor-fullscreen">
+      {/* Floating Playback Controls */}
+      <PlaybackControls notes={notes} sampler={samplerRef.current} />
+      
       <div className="piano-roll-container">
         {/* Piano keys on the left */}
         <div className="piano-keys">
